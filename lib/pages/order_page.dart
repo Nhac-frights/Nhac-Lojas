@@ -28,7 +28,7 @@ class OrderPage extends StatelessWidget {
                   ),
                 ),
                 IconContainer(
-                  icon: Icons.notifications_none_rounded,
+                  icon: Icons.search_rounded,
                 ),
               ],
             ),

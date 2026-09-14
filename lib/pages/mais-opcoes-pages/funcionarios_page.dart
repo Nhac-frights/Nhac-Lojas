@@ -78,7 +78,7 @@ class FuncionariosPage extends StatelessWidget {
                               child: ContainerNhac(
                                 letrasIcon: 'MC',
                                 informacao: 'Maria Costa',
-                                complemento: 'Gerente',
+                                complemento: 'Admin',
                                 situacao: 'Ativo',
                                 corSituacao: Colors.green,
                                 corSituacaoFundo: const Color.fromARGB(50, 76, 175, 79),
@@ -96,7 +96,7 @@ class FuncionariosPage extends StatelessWidget {
                               child: ContainerNhac(
                                 letrasIcon: 'RN',
                                 informacao: 'Rafael Nunes',
-                                complemento: 'Atendente',
+                                complemento: 'Lojista',
                                 situacao: 'Ativo',
                                 corSituacao: Colors.green,
                                 corSituacaoFundo: const Color.fromARGB(50, 76, 175, 79),
@@ -148,14 +148,14 @@ class FuncionariosPage extends StatelessWidget {
                         child: Column(
                           children: [
                             ContainerNhac(
-                              informacao: 'Gerente',
-                              complemento: 'Acessa pedidos cardápio, financeiro e relatórios', // Corrigido 'financeito'
+                              informacao: 'Admin',
+                              complemento: 'Acessa pedidos cardápio, financeiro e relatórios',
                             ),
                             SizedBox(height: 4.h),
                             Divider(),
                             SizedBox(height: 4.h),
                             ContainerNhac(
-                              informacao: 'Atendente',
+                              informacao: 'Lojista',
                               complemento: 'Acessa apenas pedidos e mensagens',
                             ),
                           ],

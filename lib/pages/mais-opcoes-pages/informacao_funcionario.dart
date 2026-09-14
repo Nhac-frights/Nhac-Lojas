@@ -134,7 +134,7 @@ class InformacaoFuncionario extends StatelessWidget {
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8.h),
-              ListaFilterTags(filtros: ['Atendente', 'Gerente']),
+              ListaFilterTags(filtros: ['Lojista', 'Admin']),
               SizedBox(height: 16.h),
               Text(
                 'O QUE ESSE CARGO ACESSA',

@@ -167,17 +167,9 @@ class FuncionariosPage extends StatelessWidget {
               ),
               
               SizedBox(height: 16.h),
-              
-              // Botão fixo na parte inferior
               ButtonNhac(
                 texto: 'Convidar funcionário',
-                onTap: () {
-                  showAppNotification(
-                    context,
-                    type: NotificationType.info,
-                    message: 'Trabalhando nisso calmaaa',
-                  );
-                },
+                onTap: () => context.push('/convidar-funcionario')
               ),
             ],
           ),

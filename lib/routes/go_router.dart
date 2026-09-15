@@ -19,6 +19,7 @@ import 'package:nhac_lojas/pages/mais-opcoes-pages/cardapio_cheio_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cardapio_vazio_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/configuracoes_app.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/configuracoes_conta.dart';
+import 'package:nhac_lojas/pages/mais-opcoes-pages/convidar_funcionario.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/criar_cupom_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cupom_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/editar_info_loja.dart';
@@ -191,6 +192,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/funcionarios',
       builder: (context, state) => const FuncionariosPage(),
+    ),
+    GoRoute(
+      path: '/convidar-funcionario',
+      builder: (context, state) => const ConvidarFuncionario(),
     ),
     GoRoute(
       path: '/informacao-funcionario',

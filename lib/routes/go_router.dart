@@ -13,6 +13,7 @@ import 'package:nhac_lojas/pages/auth/link_recuperacao_senha.dart';
 import 'package:nhac_lojas/pages/auth/nova_senha.dart';
 import 'package:nhac_lojas/pages/auth/recuperar_senha.dart';
 import 'package:nhac_lojas/pages/bem_vindo.dart';
+import 'package:nhac_lojas/pages/mais-opcoes-pages/adicionar_impressora.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/avaliacoes_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cadastrar_produtos.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cardapio_cheio_page.dart';
@@ -204,6 +205,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/impressoras',
       builder: (context, state) => const ImpressorasPage(),
+    ),
+    GoRoute(
+      path: '/adicionar-impressora',
+      builder: (context, state) => const AdicionarImpressora(),
     ),
     GoRoute(
       path: '/configuracoes-app',

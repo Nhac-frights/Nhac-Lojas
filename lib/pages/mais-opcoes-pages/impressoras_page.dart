@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nhac_lojas/components/app_notification.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
 import 'package:nhac_lojas/components/button_nhac.dart';
@@ -30,7 +31,7 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
                   const BackArrow(),
                   SizedBox(width: 12.w),
                   Text(
-                    'Impressoras', // Corrigido de 'Funcionários' para 'Impressoras'
+                    'Impressoras',
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
@@ -39,15 +40,13 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
                 ],
               ),
               SizedBox(height: 24.h),
-              
-              // Conteúdo rolável encapsulado
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'SUAS IMPRESSORAS',
+                        'Suas impressoras',
                         style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 8.h),
@@ -106,7 +105,7 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
                       ),
                       SizedBox(height: 16.h),
                       Text(
-                        'IMPRESSÃO AUTOMÁTICA',
+                        'Impressão automática',
                         style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 8.h),
@@ -174,13 +173,7 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
               SizedBox(height: 16.h),
               ButtonNhac(
                 texto: 'Adicionar impressora',
-                onTap: () {
-                  showAppNotification(
-                    context,
-                    type: NotificationType.info,
-                    message: 'Trabalhando nisso calmaaa',
-                  );
-                },
+                onTap: () => context.push('/adicionar-impressora')
               ),
             ],
           ),

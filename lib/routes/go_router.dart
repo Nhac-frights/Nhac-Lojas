@@ -13,12 +13,14 @@ import 'package:nhac_lojas/pages/auth/link_recuperacao_senha.dart';
 import 'package:nhac_lojas/pages/auth/nova_senha.dart';
 import 'package:nhac_lojas/pages/auth/recuperar_senha.dart';
 import 'package:nhac_lojas/pages/bem_vindo.dart';
+import 'package:nhac_lojas/pages/mais-opcoes-pages/adicionar_impressora.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/avaliacoes_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cadastrar_produtos.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cardapio_cheio_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cardapio_vazio_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/configuracoes_app.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/configuracoes_conta.dart';
+import 'package:nhac_lojas/pages/mais-opcoes-pages/convidar_funcionario.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/criar_cupom_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/cupom_page.dart';
 import 'package:nhac_lojas/pages/mais-opcoes-pages/editar_info_loja.dart';
@@ -193,12 +195,20 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const FuncionariosPage(),
     ),
     GoRoute(
+      path: '/convidar-funcionario',
+      builder: (context, state) => const ConvidarFuncionario(),
+    ),
+    GoRoute(
       path: '/informacao-funcionario',
       builder: (context, state) => const InformacaoFuncionario(),
     ),
     GoRoute(
       path: '/impressoras',
       builder: (context, state) => const ImpressorasPage(),
+    ),
+    GoRoute(
+      path: '/adicionar-impressora',
+      builder: (context, state) => const AdicionarImpressora(),
     ),
     GoRoute(
       path: '/configuracoes-app',

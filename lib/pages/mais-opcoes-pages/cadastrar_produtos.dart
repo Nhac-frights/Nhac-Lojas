@@ -19,7 +19,6 @@ class CadastrarProdutos extends StatefulWidget {
 class _CadastrarProdutosState extends State<CadastrarProdutos> {
   bool produtoDisponivel = true;
   
-  // Controllers sempre inicializados
   late final TextEditingController nomeController;
   late final TextEditingController descricaoController;
   late final TextEditingController precoController;

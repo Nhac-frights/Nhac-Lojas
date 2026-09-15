@@ -36,7 +36,7 @@ class ContainerNhac extends StatelessWidget {
   final bool exibirRadio;
   final bool exibirCheck;
   final ValueChanged<bool>? onCheckChanged;
-  final bool exibirCheckVerde; // <--- NOVO PARÂMETRO ADICIONADO AQUI
+  final bool exibirCheckVerde;
   final bool exibirSeta;
   final bool exibirSwitch;
   final bool ativoInicial;
@@ -83,7 +83,7 @@ class ContainerNhac extends StatelessWidget {
     this.exibirRadio = false,
     this.exibirCheck = false,
     this.onCheckChanged,
-    this.exibirCheckVerde = false, // <--- VALOR PADRÃO É FALSE
+    this.exibirCheckVerde = false,
     this.exibirSeta = false,
     this.exibirSwitch = false,
     this.ativoInicial = false,
@@ -230,7 +230,6 @@ class ContainerNhac extends StatelessWidget {
       content = Row(
         crossAxisAlignment: layoutAvaliacao ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
-          // --- RENDERIZAÇÃO DO CHECK VERDE LIMPO ---
           if (exibirCheckVerde) ...[
             Icon(
               Icons.check,
@@ -443,18 +442,18 @@ class ContainerNhac extends StatelessWidget {
                 if (situacao != null && !exibirTagEmCima)
                   Container(
                     padding: EdgeInsets.symmetric(
-                      vertical: 4.h,
-                      horizontal: 10.w,
+                      vertical: 6.h,
+                      horizontal: 14.w,
                     ),
                     decoration: BoxDecoration(
                       color: activeCorSituacaoFundo,
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
                     child: Text(
                       situacao!,
                       style: TextStyle(
                         color: activeCorSituacao,
-                        fontSize: 12.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

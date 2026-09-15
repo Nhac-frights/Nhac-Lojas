@@ -133,7 +133,7 @@ class InformacaoFuncionario extends StatelessWidget {
                 'Cargo',
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 4.h),
               ListaFilterTags(filtros: ['Lojista', 'Admin']),
               SizedBox(height: 16.h),
               Text(
@@ -165,7 +165,7 @@ class InformacaoFuncionario extends StatelessWidget {
                     Divider(),
                     SizedBox(height: 8.h),
                     ContainerNhac(
-                      informacao: 'Financeiro e relatórios',
+                      informacao: 'Painel da loja completo',
                       exibirCheckVerde: true,
                     ),
                   ],

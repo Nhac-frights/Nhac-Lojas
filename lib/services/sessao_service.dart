@@ -1,15 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nhac_lojas/models/login_resposta.dart';
 
 /// Guarda o token JWT (30 dias, ver TokenService.java do backend) e os dados
 /// básicos do usuário logado, persistindo no armazenamento seguro do sistema.
 ///
-/// Singleton simples: o app ainda não tem gerenciamento de estado
-/// (Provider/Riverpod/Bloc), então esta é a única fonte de sessão.
-class SessaoService {
+/// É um `ChangeNotifier` de propósito: o `go_router` usa esta instância como
+/// `refreshListenable`, então quando a sessão é criada ou encerrada (inclusive
+/// por 401 do backend) o redirect é reavaliado e o app volta sozinho para o
+/// login. Singleton simples — o app ainda não tem gerenciamento de estado.
+class SessaoService extends ChangeNotifier {
   SessaoService._();
 
   static final SessaoService instance = SessaoService._();
+
+  /// Papéis que podem entrar no painel da loja. O backend libera
+  /// `/api/v1/lojista/**` para qualquer usuário autenticado, mas o painel só
+  /// faz sentido para dono/funcionário/admin.
+  static const Set<String> papeisComAcessoAoPainel = {
+    'LOJISTA',
+    'FUNCIONARIO',
+    'ADMIN',
+  };
 
   static const String _chaveToken = 'nhac_token';
   static const String _chaveUsuarioId = 'nhac_usuario_id';
@@ -32,6 +44,10 @@ class SessaoService {
 
   bool get estaLogado => _token != null && _token!.isNotEmpty;
 
+  /// true quando o papel logado pode acessar o painel da loja.
+  bool get podeAcessarPainel =>
+      _papel != null && papeisComAcessoAoPainel.contains(_papel);
+
   /// Chamado no main() antes do runApp, para o interceptor do ApiService já
   /// ter o token em memória no primeiro request (sem await dentro do request).
   Future<void> carregar() async {
@@ -39,6 +55,12 @@ class SessaoService {
     _usuarioId = await _storage.read(key: _chaveUsuarioId);
     _nome = await _storage.read(key: _chaveNome);
     _papel = await _storage.read(key: _chavePapel);
+    if (_token != null && !podeAcessarPainel) {
+      // Sessão guardada de um papel sem acesso ao painel (ex.: CLIENTE).
+      await sair();
+      return;
+    }
+    notifyListeners();
   }
 
   /// Salva a sessão devolvida pelo POST /api/v1/auth/login.
@@ -47,6 +69,7 @@ class SessaoService {
     _usuarioId = resposta.usuarioId;
     _nome = resposta.nome;
     _papel = resposta.papel;
+    notifyListeners();
 
     await _storage.write(key: _chaveToken, value: resposta.token);
     await _storage.write(key: _chaveUsuarioId, value: resposta.usuarioId);
@@ -61,6 +84,7 @@ class SessaoService {
     _usuarioId = null;
     _nome = null;
     _papel = null;
+    notifyListeners();
 
     await _storage.delete(key: _chaveToken);
     await _storage.delete(key: _chaveUsuarioId);

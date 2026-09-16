@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:nhac_lojas/models/erro_padrao.dart';
 import 'package:nhac_lojas/models/login_resposta.dart';
+import 'package:nhac_lojas/models/loja.dart';
+import 'package:nhac_lojas/models/painel_resumo.dart';
 import 'package:nhac_lojas/services/sessao_service.dart';
 
 /// Erro já normalizado a partir do `ErroPadraoDTO` do backend.
@@ -18,11 +20,16 @@ class ApiException implements Exception {
   /// Preenchido quando o backend devolve erro de validação ({campo: mensagem}).
   final Map<String, dynamic> details;
 
+  /// true quando a requisição levou o token e o backend respondeu 401 —
+  /// ou seja, o token expirou/invalidou e a sessão local já foi encerrada.
+  final bool sessaoExpirada;
+
   const ApiException({
     required this.mensagem,
     this.status,
     this.codigo,
     this.details = const {},
+    this.sessaoExpirada = false,
   });
 
   @override
@@ -64,6 +71,20 @@ class ApiService {
           }
           handler.next(options);
         },
+        onError: (erro, handler) async {
+          // 401 numa requisição que levou o token = token expirado/inválido.
+          // Encerra a sessão local; como o go_router usa o SessaoService como
+          // refreshListenable, o redirect manda o app de volta para /login.
+          // O login em si não tem header Authorization, então um 401 de senha
+          // errada NÃO derruba sessão nenhuma.
+          final levouToken =
+              erro.requestOptions.headers.containsKey('Authorization');
+          if (erro.response?.statusCode == 401 && levouToken) {
+            erro.requestOptions.extra['sessaoExpirada'] = true;
+            await SessaoService.instance.sair();
+          }
+          handler.next(erro);
+        },
       ),
     );
 
@@ -88,9 +109,37 @@ class ApiService {
     }
   }
 
+  /// GET /api/v1/lojista/painel — resumo agregado da home.
+  ///
+  /// Devolve `PainelResumoDTO` (faturamento de hoje, contagem por grupo de
+  /// status, faturamento dos últimos 7 dias e os 5 pedidos mais recentes).
+  /// Requer token; 401 → sessão expirada.
+  Future<PainelResumo> obterPainel() async {
+    final dados = await _getMap('/lojista/painel');
+    return PainelResumo.fromJson(dados);
+  }
+
+  /// GET /api/v1/lojas/minha-loja — loja vinculada ao token.
+  /// 404 quando o usuário autenticado ainda não tem loja.
+  Future<LojaDetalhes> obterMinhaLoja() async {
+    final dados = await _getMap('/lojas/minha-loja');
+    return LojaDetalhes.fromJson(dados);
+  }
+
+  /// GET que devolve um objeto JSON, já traduzindo qualquer falha.
+  Future<Map<String, dynamic>> _getMap(String caminho) async {
+    try {
+      final resposta = await dio.get<Map<String, dynamic>>(caminho);
+      return resposta.data ?? const <String, dynamic>{};
+    } on DioException catch (erro) {
+      throw _traduzirErro(erro);
+    }
+  }
+
   /// Converte qualquer falha do dio no formato de erro do backend.
   ApiException _traduzirErro(DioException erro) {
     final resposta = erro.response;
+    final sessaoExpirada = erro.requestOptions.extra['sessaoExpirada'] == true;
 
     if (resposta != null) {
       final dados = resposta.data;
@@ -101,11 +150,13 @@ class ApiService {
           codigo: erroPadrao.error,
           mensagem: erroPadrao.mensagemExibicao,
           details: erroPadrao.details,
+          sessaoExpirada: sessaoExpirada,
         );
       }
       return ApiException(
         status: resposta.statusCode,
         mensagem: 'Erro ${resposta.statusCode} ao falar com o servidor.',
+        sessaoExpirada: sessaoExpirada,
       );
     }
 

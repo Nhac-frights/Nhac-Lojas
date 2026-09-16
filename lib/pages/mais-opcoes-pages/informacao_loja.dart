@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
 import 'package:nhac_lojas/components/button_nhac.dart';
 import 'package:nhac_lojas/components/container_nhac.dart';
+import 'package:nhac_lojas/services/sessao_service.dart';
 
 class InformacaoLoja extends StatefulWidget {
   const InformacaoLoja({super.key});
@@ -59,7 +60,13 @@ class _InformacaoLojaState extends State<InformacaoLoja> {
                 SizedBox(height: 24.h),
                 ButtonNhac(
                   texto: 'Sair da conta',
-                  onTap: () => context.go('/bem-vindo'),
+                  onTap: () async {
+                    Navigator.pop(modalContext);
+                    // Limpa o token: o redirect do go_router já leva para /login.
+                    await SessaoService.instance.sair();
+                    if (!context.mounted) return;
+                    context.go('/login');
+                  },
                 ),
                 SizedBox(height: 12.h,),
                 ButtonNhac(

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:nhac_lojas/pages/auth/cadastro/confirmar_email_page.dart';
+import 'package:nhac_lojas/services/sessao_service.dart';
 import 'package:nhac_lojas/pages/auth/cadastro/criar_conta_page.dart';
 import 'package:nhac_lojas/pages/auth/cadastro/dados_basicos_page.dart';
 import 'package:nhac_lojas/pages/auth/cadastro/dados_entrega_page.dart';
@@ -42,8 +43,44 @@ import 'package:nhac_lojas/pages/order_details_page.dart';
 import 'package:nhac_lojas/pages/order_page.dart';
 import 'package:nhac_lojas/pages/update_order_status.dart';
 
+/// Rotas que podem ser abertas sem sessão: login, recuperação de senha e o
+/// wizard de cadastro da loja. Qualquer outra rota exige estar logado.
+const Set<String> rotasPublicas = {
+  '/bem-vindo',
+  '/login',
+  '/criar-conta',
+  '/confirmar-email',
+  '/dados-basicos',
+  '/endereco-loja',
+  '/dados-entrega',
+  '/horario-funcionamento',
+  '/forma-pagamento-cadastro',
+  '/revisar-dados',
+  '/loja-cadastrada',
+  '/recuperar-senha',
+  '/link-recuperacao',
+  '/nova-senha',
+};
+
 final GoRouter appRouter = GoRouter(
   initialLocation: '/bem-vindo',
+  // O SessaoService é um ChangeNotifier: quando a sessão é criada ou encerrada
+  // (inclusive por 401 do backend) o redirect abaixo é reavaliado e o usuário
+  // vai para a rota certa sem navegação explícita.
+  refreshListenable: SessaoService.instance,
+  redirect: (context, state) {
+    final sessao = SessaoService.instance;
+    final local = state.matchedLocation;
+    final rotaPublica = rotasPublicas.contains(local);
+
+    // Sem sessão: só as rotas públicas (senão, login).
+    if (!sessao.estaLogado) return rotaPublica ? null : '/login';
+
+    // Com sessão: bem-vindo e login viram a home.
+    if (local == '/bem-vindo' || local == '/login') return '/home';
+
+    return null;
+  },
   routes: [
     ShellRoute(
       builder: (context, state, child) {

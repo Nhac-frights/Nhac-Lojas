@@ -51,6 +51,19 @@ class _LoginLojaState extends State<LoginLoja> {
         email: email,
         senha: senha,
       );
+
+      // Gate de papel: este é o app do lojista. CLIENTE e ENTREGADOR não
+      // entram no painel (não salvamos a sessão deles).
+      if (!SessaoService.papeisComAcessoAoPainel.contains(resposta.papel)) {
+        if (!mounted) return;
+        showAppNotification(
+          context,
+          type: NotificationType.error,
+          message: 'Esta conta não tem acesso ao painel da loja.',
+        );
+        return;
+      }
+
       await SessaoService.instance.salvar(resposta);
       if (!mounted) return;
       context.go('/home');
@@ -173,42 +186,6 @@ class _LoginLojaState extends State<LoginLoja> {
                       },
                     ),
                   ),
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        indent: 30.w,
-                        endIndent: 10.w,
-                      ),
-                    ),
-                    Text(
-                      "Ou",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: const Color.fromARGB(255, 99, 99, 99),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        indent: 10.w,
-                        endIndent: 30.w,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-                ButtonNhac(
-                  texto: 'Continuar com o Google',
-                  isSecundario: true,
-                  icone: SvgPicture.asset(
-                    'assets/images/google-logo.svg',
-                    height: 24.h,
-                    width: 24.w,
-                  ),
-                  onTap: () => context.go('/home'),
                 ),
                 SizedBox(height: 32.h),
                 ButtonNhac(

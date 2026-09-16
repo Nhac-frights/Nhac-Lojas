@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nhac_lojas/components/app_notification.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
 import 'package:nhac_lojas/components/button_nhac.dart';
 import 'package:nhac_lojas/components/nhac_input_field.dart';
+import 'package:nhac_lojas/services/api_service.dart';
+import 'package:nhac_lojas/services/sessao_service.dart';
 
 class LoginLoja extends StatefulWidget {
   const LoginLoja({super.key});
@@ -15,6 +18,60 @@ class LoginLoja extends StatefulWidget {
 
 class _LoginLojaState extends State<LoginLoja> {
   bool _senhaVisivel = false;
+  bool _carregando = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+
+  String? _erroEmail;
+  String? _erroSenha;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    super.dispose();
+  }
+
+  /// POST /api/v1/auth/login {email, senha} → LoginResponseDTO.
+  /// Guarda o token (30 dias) e entra no painel.
+  Future<void> _entrar() async {
+    final email = _emailController.text.trim();
+    final senha = _senhaController.text;
+
+    setState(() {
+      _erroEmail = email.isEmpty ? 'Informe seu e-mail' : null;
+      _erroSenha = senha.isEmpty ? 'Informe sua senha' : null;
+    });
+    if (_erroEmail != null || _erroSenha != null) return;
+
+    setState(() => _carregando = true);
+    try {
+      final resposta = await ApiService.instance.login(
+        email: email,
+        senha: senha,
+      );
+      await SessaoService.instance.salvar(resposta);
+      if (!mounted) return;
+      context.go('/home');
+    } on ApiException catch (erro) {
+      if (!mounted) return;
+      // VALIDACAO_FALHOU traz details por campo; o resto vai como notificação.
+      setState(() {
+        _erroEmail = erro.details['email']?.toString();
+        _erroSenha = erro.details['senha']?.toString();
+      });
+      if (_erroEmail == null && _erroSenha == null) {
+        showAppNotification(
+          context,
+          type: NotificationType.error,
+          message: erro.mensagem,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _carregando = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +113,14 @@ class _LoginLojaState extends State<LoginLoja> {
                   style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4.h),
-                const NhacInputField(hintText: 'Email'),
+                NhacInputField(
+                  controller: _emailController,
+                  hintText: 'Email',
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  errorText: _erroEmail,
+                  enabled: !_carregando,
+                ),
                 SizedBox(height: 16.h),
                 Text(
                   'Senha',
@@ -64,8 +128,13 @@ class _LoginLojaState extends State<LoginLoja> {
                 ),
                 SizedBox(height: 4.h),
                 NhacInputField(
+                  controller: _senhaController,
                   hintText: 'Senha',
                   obscureText: !_senhaVisivel,
+                  textInputAction: TextInputAction.done,
+                  errorText: _erroSenha,
+                  enabled: !_carregando,
+                  onFieldSubmitted: (_) => _entrar(),
                   suffixIcon: IconButton(
                     icon: _senhaVisivel
                         ? Icon(Icons.visibility, color: const Color(0xFFFF6961), size: 24.sp)
@@ -143,8 +212,8 @@ class _LoginLojaState extends State<LoginLoja> {
                 ),
                 SizedBox(height: 32.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.go('/home'),
+                  texto: _carregando ? 'Entrando...' : 'Continuar',
+                  onTap: _carregando ? null : _entrar,
                 ),
               ],
             ),

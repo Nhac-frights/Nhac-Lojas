@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhac_lojas/routes/go_router.dart';
+import 'package:nhac_lojas/services/sessao_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Carrega o token salvo no armazenamento seguro para o interceptor do
+  // ApiService já poder usá-lo sem await dentro das chamadas.
+  await SessaoService.instance.carregar();
   runApp(const MainApp());
 }
 

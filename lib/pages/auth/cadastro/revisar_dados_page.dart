@@ -275,21 +275,6 @@ class _RevisarDadosPageState extends State<RevisarDadosPage> {
                 SizedBox(height: 18.h),
 
                 ContainerCardRevisao(
-                  title: 'Pagamento',
-                  onEdit: () => context.push('/forma-pagamento-cadastro?fromReview=true'),
-                  child: Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
-                    children: const [
-                      ListaFilterTags(
-                        filtros: ['Dinheiro', 'Crédito', 'Débito', 'Pix']
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 18.h),
-
-                ContainerCardRevisao(
                   title: 'Horários',
                   onEdit: () => context.push('/horario-funcionamento?fromReview=true'),
                   child: Column(
@@ -352,6 +337,21 @@ class _RevisarDadosPageState extends State<RevisarDadosPage> {
                             ),
                           ),
                         ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 18.h),
+
+                ContainerCardRevisao(
+                  title: 'Pagamento',
+                  onEdit: () => context.push('/forma-pagamento-cadastro?fromReview=true'),
+                  child: Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: const [
+                      ListaFilterTags(
+                        filtros: ['Dinheiro', 'Crédito', 'Débito', 'Pix']
                       ),
                     ],
                   ),

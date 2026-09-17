@@ -146,7 +146,7 @@ class ContainerNhac extends StatelessWidget {
 
       subTituloExibicao = [
         textoItens,
-        if (precoFormatado != null) precoFormatado,
+        ?precoFormatado,
         if (!complementoAoLadoPreco && complemento != null) complemento!,
       ].join(' · ');
     } else {
@@ -280,8 +280,8 @@ class ContainerNhac extends StatelessWidget {
 
           if (icon != null || letrasIcon != null) ...[
             Container(
-              width: 48.w,
-              height: 48.h,
+              width: 48.r,
+              height: 48.r,
               decoration: BoxDecoration(
                 color: corFundoIcone,
                 shape: formatoIcone,

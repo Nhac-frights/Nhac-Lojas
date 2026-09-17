@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
 import 'package:nhac_lojas/components/container_nhac.dart';
 import 'package:nhac_lojas/components/filter_tag.dart';
-import 'package:nhac_lojas/components/icon_container.dart';
 
 class RelatorioPage extends StatelessWidget {
   const RelatorioPage({super.key});
@@ -12,12 +11,14 @@ class RelatorioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20.w, 46.h, 20.w, 110.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: SafeArea(
+        bottom: false,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Row(
                 children: [
                   const BackArrow(),
@@ -49,7 +50,7 @@ class RelatorioPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: ContainerNhac(
-                        preco: 540.90,
+                        preco: 540.90.sp,
                         fontSizePreco: 18.sp,
                         complemento: 'Faturamento',
                         fontWeightComplemento: FontWeight.bold,
@@ -85,7 +86,7 @@ class RelatorioPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: ContainerNhac(
-                        preco: 45.08,
+                        preco: 45.08.sp,
                         fontSizePreco: 18.sp,
                         complemento: 'Ticket médio',
                         fontWeightComplemento: FontWeight.bold,
@@ -218,6 +219,7 @@ class RelatorioPage extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }

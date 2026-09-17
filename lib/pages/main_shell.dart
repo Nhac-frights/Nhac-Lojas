@@ -99,7 +99,10 @@ class _MainShellState extends State<MainShell> {
           },
           child: Stack(
             children: [
-              widget.child,
+              SafeArea(
+                bottom: false,
+                child: widget.child,
+              ),
               ScrollToTopButton(
                 visible: _isScrolledDown,
                 onTap: _scrollToTop,

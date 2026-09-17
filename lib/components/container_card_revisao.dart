@@ -37,13 +37,17 @@ class ContainerCardRevisao extends StatelessWidget {
                 ),
               ),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: onEdit,
-                child: Text(
-                  'Editar',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                  child: Text(
+                    'Editar',
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

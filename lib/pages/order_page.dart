@@ -14,7 +14,7 @@ class OrderPage extends StatelessWidget {
     return SingleChildScrollView(
       controller: ScrollShellController.of(context),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20.w, 46.h, 20.w, 110.h),
+        padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 110.h),
         child: Column(
           children: [
             Row(

@@ -53,7 +53,7 @@ class _ListaFilterTagsState extends State<ListaFilterTags> {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         itemCount: widget.filtros.length,
-        separatorBuilder: (_, __) => SizedBox(width: 8.w),
+        separatorBuilder: (_, _) => SizedBox(width: 8.w),
         itemBuilder: (context, index) {
           final filtroAtual = widget.filtros[index];
           final qtdAtual = (widget.quantidades != null && widget.quantidades!.length > index)

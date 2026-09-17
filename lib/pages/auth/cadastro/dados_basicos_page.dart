@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
@@ -14,11 +15,16 @@ class DadosBasicosPage extends StatefulWidget {
 }
 
 class _DadosBasicosState extends State<DadosBasicosPage> {
+  bool isCnpj = true;
+  final TextEditingController documentoController = TextEditingController();
+  final TextEditingController razaoSocialController = TextEditingController();
   final TextEditingController tipoEstabelecimentoController = TextEditingController();
   final TextEditingController tipoCulinariaController = TextEditingController();
 
   @override
   void dispose() {
+    documentoController.dispose();
+    razaoSocialController.dispose();
     tipoEstabelecimentoController.dispose();
     tipoCulinariaController.dispose();
     super.dispose();
@@ -26,6 +32,8 @@ class _DadosBasicosState extends State<DadosBasicosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool fromReview =
+        GoRouterState.of(context).uri.queryParameters['fromReview'] == 'true';
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -66,8 +74,8 @@ class _DadosBasicosState extends State<DadosBasicosPage> {
                     Stack(
                       children: [
                         Container(
-                          width: 76.w,
-                          height: 76.w,
+                          width: 76.r,
+                          height: 76.r,
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 255, 213, 213),
                             shape: BoxShape.circle,
@@ -134,12 +142,122 @@ class _DadosBasicosState extends State<DadosBasicosPage> {
                 SizedBox(height: 4.h),
                 const NhacInputField(hintText: 'Ex: Nhac Burguer'),
                 SizedBox(height: 16.h),
+
+                Text(
+                  'Tipo de documento',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (!isCnpj) {
+                            setState(() {
+                              isCnpj = true;
+                              documentoController.clear();
+                            });
+                          }
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          decoration: BoxDecoration(
+                            color: isCnpj ? const Color(0xFF5D201C) : Colors.white,
+                            borderRadius: BorderRadius.circular(50.r),
+                            border: Border.all(
+                              color: const Color(0xFF5D201C),
+                              width: 1.w,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'CNPJ (Empresa)',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: isCnpj ? Colors.white : const Color(0xFF5D201C),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (isCnpj) {
+                            setState(() {
+                              isCnpj = false;
+                              documentoController.clear();
+                            });
+                          }
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          decoration: BoxDecoration(
+                            color: !isCnpj ? const Color(0xFF5D201C) : Colors.white,
+                            borderRadius: BorderRadius.circular(50.r),
+                            border: Border.all(
+                              color: const Color(0xFF5D201C),
+                              width: 1.w,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'CPF (Pessoa Física)',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: !isCnpj ? Colors.white : const Color(0xFF5D201C),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+
+                Text(
+                  isCnpj ? 'CNPJ' : 'CPF do responsável',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 4.h),
+                NhacInputField(
+                  controller: documentoController,
+                  hintText: isCnpj ? '00.000.000/0000-00' : '000.000.000-00',
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    _DocumentoInputFormatter(isCnpj: isCnpj),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+
+                if (isCnpj) ...[
+                  Text(
+                    'Razão Social',
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4.h),
+                  NhacInputField(
+                    controller: razaoSocialController,
+                    hintText: 'Ex: Nhac Restaurante e Hamburgueria Ltda',
+                  ),
+                  SizedBox(height: 16.h),
+                ],
+
                 Text(
                   'Descrição da loja',
                   style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4.h),
-                const NhacInputField(hintText: 'Conte um pouco sobre a sua loja...'),
+                const NhacInputField(
+                  hintText: 'Conte um pouco sobre a sua loja...',
+                  maxLines: 3,
+                ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
@@ -274,14 +392,60 @@ class _DadosBasicosState extends State<DadosBasicosPage> {
                 ),
                 SizedBox(height: 24.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.push('/endereco-loja'),
+                  texto: fromReview ? 'Salvar e voltar à revisão' : 'Continuar',
+                  onTap: () {
+                    if (fromReview) {
+                      context.pop();
+                    } else {
+                      context.push('/endereco-loja');
+                    }
+                  },
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DocumentoInputFormatter extends TextInputFormatter {
+  final bool isCnpj;
+
+  _DocumentoInputFormatter({required this.isCnpj});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final maxLen = isCnpj ? 14 : 11;
+    final trimmed = digitsOnly.length > maxLen
+        ? digitsOnly.substring(0, maxLen)
+        : digitsOnly;
+
+    final StringBuffer buffer = StringBuffer();
+    if (isCnpj) {
+      for (int i = 0; i < trimmed.length; i++) {
+        if (i == 2 || i == 5) buffer.write('.');
+        if (i == 8) buffer.write('/');
+        if (i == 12) buffer.write('-');
+        buffer.write(trimmed[i]);
+      }
+    } else {
+      for (int i = 0; i < trimmed.length; i++) {
+        if (i == 3 || i == 6) buffer.write('.');
+        if (i == 9) buffer.write('-');
+        buffer.write(trimmed[i]);
+      }
+    }
+
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

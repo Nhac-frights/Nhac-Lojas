@@ -11,9 +11,10 @@ class AvaliacoesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20.w, 46.h, 20.w, 110.h),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -84,6 +85,7 @@ class AvaliacoesPage extends StatelessWidget {
                 comentario: 'Muito bom, só a batata que veio fria'
               ),
             ],
+          ),
           ),
         ),
       ),

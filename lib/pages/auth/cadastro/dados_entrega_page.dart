@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:nhac_lojas/components/back_arrow.dart';
 import 'package:nhac_lojas/components/button_nhac.dart';
 import 'package:nhac_lojas/components/container_nhac.dart';
-import 'package:nhac_lojas/components/nhac_input_field.dart';
 import 'package:nhac_lojas/components/register_steps.dart';
 
 class DadosEntregaPage extends StatefulWidget {
@@ -19,6 +18,9 @@ class _DadosEntregaPageState extends State<DadosEntregaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool fromReview =
+        GoRouterState.of(context).uri.queryParameters['fromReview'] == 'true';
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -96,8 +98,14 @@ class _DadosEntregaPageState extends State<DadosEntregaPage> {
                 ),
                 SizedBox(height: 32.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.push('/horario-funcionamento'),
+                  texto: fromReview ? 'Salvar e voltar à revisão' : 'Continuar',
+                  onTap: () {
+                    if (fromReview) {
+                      context.pop();
+                    } else {
+                      context.push('/horario-funcionamento');
+                    }
+                  },
                 ),
               ],
             ),

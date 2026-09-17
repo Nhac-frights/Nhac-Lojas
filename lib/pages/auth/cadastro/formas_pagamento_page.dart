@@ -16,6 +16,9 @@ class FormasPagamentoPage extends StatefulWidget {
 class _FormasPagamentoPageState extends State<FormasPagamentoPage> {
   @override
   Widget build(BuildContext context) {
+    final bool fromReview =
+        GoRouterState.of(context).uri.queryParameters['fromReview'] == 'true';
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,8 +90,14 @@ class _FormasPagamentoPageState extends State<FormasPagamentoPage> {
                 ),
                 SizedBox(height: 24.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.push('/revisar-dados'),
+                  texto: fromReview ? 'Salvar e voltar à revisão' : 'Continuar',
+                  onTap: () {
+                    if (fromReview) {
+                      context.pop();
+                    } else {
+                      context.push('/revisar-dados');
+                    }
+                  },
                 ),
               ],
             ),

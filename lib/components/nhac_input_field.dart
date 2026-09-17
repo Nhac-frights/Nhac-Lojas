@@ -58,8 +58,10 @@ class NhacInputField extends StatelessWidget {
     const Color hintColor = Color(0xFFC9BCBC);
     const Color cursorColor = Color(0xFFFF6961);
 
+    final radius = (maxLines != null && maxLines! > 1) ? 16.r : 50.r;
+
     final borderStyle = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(50.r),
+      borderRadius: BorderRadius.circular(radius),
       borderSide: const BorderSide(
         color: primaryColor,
         width: 1.0,
@@ -67,7 +69,7 @@ class NhacInputField extends StatelessWidget {
     );
 
     final focusedBorderStyle = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(50.r),
+      borderRadius: BorderRadius.circular(radius),
       borderSide: const BorderSide(
         color: primaryColor,
         width: 2.0,

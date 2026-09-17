@@ -11,6 +11,9 @@ class HorarioFuncionamentoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool fromReview =
+        GoRouterState.of(context).uri.queryParameters['fromReview'] == 'true';
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -107,8 +110,14 @@ class HorarioFuncionamentoPage extends StatelessWidget {
                 ),
                 SizedBox(height: 24.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.push('/forma-pagamento-cadastro'),
+                  texto: fromReview ? 'Salvar e voltar à revisão' : 'Continuar',
+                  onTap: () {
+                    if (fromReview) {
+                      context.pop();
+                    } else {
+                      context.push('/forma-pagamento-cadastro');
+                    }
+                  },
                 ),
               ],
             ),

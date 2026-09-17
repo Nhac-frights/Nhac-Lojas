@@ -10,12 +10,13 @@ class FinanceiroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20.w, 46.h, 20.w, 110.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Row(
                 children: [
                   const BackArrow(),
@@ -261,6 +262,7 @@ class FinanceiroPage extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }

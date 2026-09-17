@@ -95,8 +95,8 @@ class RegisterSteps extends StatelessWidget {
   }) {
     if (isCompleted) {
       return Container(
-        width: 28.w,
-        height: 28.h,
+        width: 28.r,
+        height: 28.r,
         decoration: const BoxDecoration(
           color: Colors.redAccent,
           shape: BoxShape.circle,
@@ -105,8 +105,8 @@ class RegisterSteps extends StatelessWidget {
       );
     } else if (isCurrent) {
       return Container(
-        width: 36.w,
-        height: 36.h,
+        width: 36.r,
+        height: 36.r,
         decoration: const BoxDecoration(
           color: Colors.redAccent,
           shape: BoxShape.circle,
@@ -115,8 +115,8 @@ class RegisterSteps extends StatelessWidget {
       );
     } else {
       return Container(
-        width: 28.w,
-        height: 28.h,
+        width: 28.r,
+        height: 28.r,
         decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.circle,

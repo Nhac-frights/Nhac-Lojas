@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return SingleChildScrollView(
       controller: ScrollShellController.of(context),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20.w, 46.h, 20.w, 110.h),
+        padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 110.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -25,8 +25,8 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 48.w,
-                      height: 48.w,
+                      width: 48.r,
+                      height: 48.r,
                       padding: EdgeInsets.all(8.r),
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 242, 230),

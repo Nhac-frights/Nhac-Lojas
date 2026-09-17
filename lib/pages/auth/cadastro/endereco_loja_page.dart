@@ -11,6 +11,9 @@ class EnderecoLojaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool fromReview =
+        GoRouterState.of(context).uri.queryParameters['fromReview'] == 'true';
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -53,6 +56,7 @@ class EnderecoLojaPage extends StatelessWidget {
                 SizedBox(height: 4.h),
                 NhacInputField(
                   hintText: '00000-000',
+                  keyboardType: TextInputType.number,
                   suffixIcon: Icon(
                     Icons.search_rounded,
                     color: Colors.redAccent,
@@ -80,7 +84,10 @@ class EnderecoLojaPage extends StatelessWidget {
                             style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 4.h),
-                          const NhacInputField(hintText: '123'),
+                          const NhacInputField(
+                            hintText: '123',
+                            keyboardType: TextInputType.number,
+                          ),
                         ],
                       ),
                     ),
@@ -145,8 +152,14 @@ class EnderecoLojaPage extends StatelessWidget {
                 ),
                 SizedBox(height: 24.h),
                 ButtonNhac(
-                  texto: 'Continuar',
-                  onTap: () => context.push('/dados-entrega'),
+                  texto: fromReview ? 'Salvar e voltar à revisão' : 'Continuar',
+                  onTap: () {
+                    if (fromReview) {
+                      context.pop();
+                    } else {
+                      context.push('/dados-entrega');
+                    }
+                  },
                 ),
               ],
             ),

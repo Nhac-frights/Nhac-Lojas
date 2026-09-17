@@ -9,8 +9,8 @@ class IconContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40.w,
-      height: 40.h,
+      width: 40.r,
+      height: 40.r,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.6),
         shape: BoxShape.circle,
